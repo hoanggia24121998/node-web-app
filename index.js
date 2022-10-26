@@ -1,6 +1,6 @@
 const tracer = require('dd-trace').init()
 const express = require('express')
-import { uid } from 'uid';
+const { v4: uuidv4 } = require('uuid');
 const app = express()
 const port = process.env.PORT || 3000
 const BodyParser = require("body-parser");
@@ -37,10 +37,10 @@ let blogObject = null
 
 app.post('/blogs', async (req, res) => {
   const { body } = req
-  const { name, description, country, views } = body
+  const { name, description, country, views, images_url } = body
   const query = {
     text: "INSERT INTO Blog VALUES ($1, $2, $3, $4, $5, $6)",
-    values: [uid(16), name, description, country, views, images_url],
+    values: [uuidv4(), name, description, country, views, images_url],
   }
   await client
     .query(query)
